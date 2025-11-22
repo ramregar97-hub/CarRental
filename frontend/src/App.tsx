@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import CarDetails from "./Pages/CarDetails.tsx";
 import MyCars from "./Pages/MyCars.tsx"; // Import MyCars component
 import AddCar from "./Pages/AddCar.tsx";
+import EditCar from "./Pages/EditCar.tsx";
 import { Toaster } from "sonner";
 
 const App: React.FC = () => {
@@ -28,6 +29,14 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
+            <Route
+                path="/car/edit/:id"
+                element={
+                    <ProtectedRoute>
+                        <EditCar />
+                    </ProtectedRoute>
+                }
+            />
           <Route
             path="/my-cars"
             element={

@@ -65,3 +65,8 @@ export const toggleCarLiveStatus = async (id: string) => {
   const res = await API.patch(`/cars/toggle-live/${id}`);
   return res.data;
 }
+
+export const updateCarAPI = async (id: string, data: any) => {
+    const res = await API.put(`/cars/${id}`, data);
+    return res.data;
+}

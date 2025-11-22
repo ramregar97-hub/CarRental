@@ -116,9 +116,11 @@ const CarDetails: React.FC = () => {
                     </div>
 
                     {isOwner && (
+                         <div className="flex gap-2 mt-4">
+                         <Button variant="outline" onClick={() => navigate(`/car/edit/${id}`)}>Edit Car</Button>
                          <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                             <AlertDialogTrigger asChild>
-                                <Button variant="destructive" className="mt-4">Delete Car</Button>
+                                <Button variant="destructive">Delete Car</Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
@@ -134,6 +136,7 @@ const CarDetails: React.FC = () => {
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialog>
+                        </div>
                     )}
 
                     {ownerDetails && (
