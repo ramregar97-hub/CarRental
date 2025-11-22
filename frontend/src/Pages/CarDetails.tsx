@@ -1,7 +1,7 @@
 // src/pages/CarDetails.tsx
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getCarById, buyCarAPI } from "../API/api";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCarById, buyCarAPI, deleteCar } from "../API/api";
 import { useAuth } from "../context/AuthContext";
 import { Button } from "../components/ui/button";
 
@@ -16,6 +16,7 @@ const CarDetails: React.FC = () => {
     const [car, setCar] = useState<any | null>(null);
     const [ownerDetails, setOwnerDetails] = useState<OwnerDetails | null>(null);
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         (async () => {
@@ -42,6 +43,23 @@ const CarDetails: React.FC = () => {
         } catch (err: any) {
             console.error(err);
             alert(err?.message || "Purchase failed");
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!id) return;
+        try {
+            await deleteCar(id);
+            alert("Car deleted successfully");
+            navigate("/");
+        } catch (err: any) {
+            console.error(err);
+            if (err.response && err.response.status === 404) {
+                alert("This car has already been deleted.");
+                navigate("/");
+            } else {
+                alert(err?.message || "Delete failed");
+            }
         }
     };
 
@@ -83,6 +101,14 @@ const CarDetails: React.FC = () => {
                             </div>
                         )}
                     </div>
+
+                    {isOwner && (
+                        <div className="mt-4">
+                            <Button onClick={handleDelete} variant="destructive">
+                                Delete Car
+                            </Button>
+                        </div>
+                    )}
 
                     {ownerDetails && (
                         <div className="mt-6 p-4 border rounded">
