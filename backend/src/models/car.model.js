@@ -9,7 +9,8 @@ const carSchema = new mongoose.Schema({
   kmDriven: { type: Number, required: true },
   fuelType: { type: String, required: true },
   transmission: { type: String, required: true },
- images: { type: [String], required: false },
+  images: { type: [String], required: false },
+  isLive: { type: Boolean, default: true },
   // Owner / Seller
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   // Buyer

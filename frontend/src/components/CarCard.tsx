@@ -15,6 +15,7 @@ export interface Car {
     transmission: string;
     images?: string[];
     isSold?: boolean;
+    isLive?: boolean;
 }
 
 interface CarCardProps {

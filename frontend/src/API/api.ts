@@ -60,3 +60,8 @@ export const buyCarAPI = async (id: string) => {
   const res = await API.post(`/cars/buy/${id}`);
   return res.data; // expected { message, ownerDetails }
 };
+
+export const toggleCarLiveStatus = async (id: string) => {
+  const res = await API.patch(`/cars/toggle-live/${id}`);
+  return res.data;
+}

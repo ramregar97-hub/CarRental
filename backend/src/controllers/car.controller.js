@@ -74,7 +74,7 @@ export const buyCar = async (req, res) => {
 
 export const getCars = async (req, res) => {
   try {
-    const cars = await Car.find({ isSold: false }).populate(
+    const cars = await Car.find({ isSold: false, isLive: true }).populate(
       "owner",
       "name email _id"
     );
@@ -123,3 +123,20 @@ export const deleteCar = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const toggleLiveStatus = async (req, res) => {
+  try {
+    const car = await Car.findById(req.params.id);
+    if (!car) {
+      return res.status(404).json({ message: "Car not found" });
+    }
+    if (car.owner.toString() !== req.user.id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    car.isLive = !car.isLive;
+    await car.save();
+    res.status(200).json({ message: "Car status updated successfully", car });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
