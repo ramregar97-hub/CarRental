@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 
 export interface Car {
     _id: string;
-    title?: string;
-    brand?: string;
-    model?: string;
-    year?: number;
+    title: string;
+    brand: string;
+    model: string;
+    year: number;
     price: number;
+    kmDriven: number;
+    fuelType: string;
+    transmission: string;
     images?: string[];
     isSold?: boolean;
 }
@@ -30,6 +33,9 @@ const CarCard: React.FC<{ car: Car }> = ({ car }) => {
             <div className="p-3">
                 <h4 className="font-semibold">{car.title ?? `${car.brand} ${car.model}`}</h4>
                 <p className="text-sm text-gray-600">Year: {car.year ?? "-"}</p>
+                <p className="text-sm text-gray-500">
+                    {car.kmDriven.toLocaleString()} km · {car.fuelType} · {car.transmission}
+                </p>
                 <p className="text-lg font-bold mt-2">₹ {car.price.toLocaleString()}</p>
 
                 <div className="mt-3 flex gap-2">

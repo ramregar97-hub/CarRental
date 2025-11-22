@@ -4,12 +4,14 @@ import CarCard from "../components/CarCard";
 
 export interface Car {
     _id: string;
-    name: string; // Add name property
-    title?: string;
-    brand?: string;
-    model?: string;
-    year?: number;
+    title: string;
+    brand: string;
+    model: string;
+    year: number;
     price: number;
+    kmDriven: number;
+    fuelType: string;
+    transmission: string;
     images?: string[];
     isSold?: boolean;
 }
@@ -47,7 +49,7 @@ const Home: React.FC = () => {
         // Search by name
         if (search.trim()) {
             list = list.filter((car) =>
-                car.name.toLowerCase().includes(search.toLowerCase())
+                car.title.toLowerCase().includes(search.toLowerCase())
             );
         }
 
@@ -69,6 +71,13 @@ const Home: React.FC = () => {
         }
 
         setFilteredCars(list);
+    };
+
+    const clearFilters = () => {
+        setSearch("");
+        setMinPrice("");
+        setMaxPrice("");
+        setSort("");
     };
 
     useEffect(() => {
@@ -100,13 +109,13 @@ const Home: React.FC = () => {
 
                 <h2 className="text-xl font-semibold mb-4">Filter Cars</h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
 
                     {/* Search by Name */}
                     <input
                         type="text"
                         placeholder="Search by car name..."
-                        className="border p-2 rounded-md"
+                        className="border p-2 rounded-md md:col-span-2"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -131,7 +140,7 @@ const Home: React.FC = () => {
 
                     {/* Sort Options */}
                     <select
-                        className="border p-2 rounded-md col-span-1 sm:col-span-3"
+                        className="border p-2 rounded-md"
                         value={sort}
                         onChange={(e) => setSort(e.target.value)}
                     >
@@ -139,6 +148,21 @@ const Home: React.FC = () => {
                         <option value="low">Price: Low → High</option>
                         <option value="high">Price: High → Low</option>
                     </select>
+                </div>
+
+                <div className="mt-4 flex gap-4">
+                    <button
+                        className="bg-blue-500 text-white p-2 rounded-md"
+                        onClick={applyFilters}
+                    >
+                        Apply Filters
+                    </button>
+                    <button
+                        className="bg-gray-300 text-gray-700 p-2 rounded-md"
+                        onClick={clearFilters}
+                    >
+                        Clear Filters
+                    </button>
                 </div>
             </div>
 
