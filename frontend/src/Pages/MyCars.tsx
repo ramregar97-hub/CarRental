@@ -33,12 +33,16 @@ const MyCars = () => {
 
   const handleToggleLiveStatus = async (id: string) => {
     try {
-      await toggleCarLiveStatus(id);
-      fetchMyCars();
+      const { car: updatedCar } = await toggleCarLiveStatus(id);
+      setMyCars((prevCars) =>
+        prevCars.map((car) =>
+          car._id === id ? { ...car, ...updatedCar } : car
+        )
+      );
     } catch (error) {
       console.error("Failed to toggle car live status:", error);
     }
-  }
+  };
 
   if (!user) {
     return (
@@ -62,7 +66,11 @@ const MyCars = () => {
                 <Button onClick={() => handleToggleLiveStatus(car._id)}>
                   {car.isLive ? "Make Offline" : "Make Online"}
                 </Button>
-                <div className={`w-4 h-4 rounded-full ml-2 ${car.isLive ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                <div
+                  className={`w-4 h-4 rounded-full ml-2 ${
+                    car.isLive ? "bg-green-500" : "bg-red-500"
+                  }`}
+                ></div>
               </div>
             </div>
           ))}

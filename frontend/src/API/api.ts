@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://carrental-o4g2.onrender.com/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 // Add token automatically from localStorage
