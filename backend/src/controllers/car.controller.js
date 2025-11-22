@@ -50,6 +50,9 @@ export const buyCar = async (req, res) => {
     const car = await Car.findById(carId).populate("owner");
 
     if (!car) return res.status(404).json({ message: "Car not found" });
+    if (car.owner.id === buyerId) {
+      return res.status(400).json({ message: "You cannot buy your own car" });
+    }
     if (car.isSold) return res.status(400).json({ message: "Car already sold" });
 
     car.isSold = true;

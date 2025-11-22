@@ -47,6 +47,9 @@ const CarDetails: React.FC = () => {
 
     if (!car) return <div>Loading car...</div>;
 
+    // The current user is the owner of the car
+    const isOwner = user && car.owner._id === user.id;
+
     return (
         <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -69,8 +72,13 @@ const CarDetails: React.FC = () => {
                         {car.isSold ? (
                             <div className="text-red-600 font-medium">This car is already sold</div>
                         ) : (
-                            <div className="flex gap-2">
-                                <Button onClick={handleBuy} disabled={!user}>Buy Now</Button>
+                            <div className="flex gap-2 items-center">
+                                <Button onClick={handleBuy} disabled={!user || isOwner}>
+                                    Buy Now
+                                </Button>
+                                {isOwner && (
+                                    <span className="text-sm text-gray-500">You cannot buy your own car</span>
+                                )}
                                 {!user && <span className="text-sm text-gray-500">Login to buy</span>}
                             </div>
                         )}
