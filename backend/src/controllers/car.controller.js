@@ -6,8 +6,26 @@ export const addCar = async (req, res) => {
 
     const imagePaths = req.files ? req.files.map(file => file.path) : [];
 
+    const {
+      title,
+      brand,
+      model,
+      year,
+      price,
+      kmDriven,
+      fuelType,
+      transmission
+    } = req.body;
+
     const car = await Car.create({
-      ...req.body,
+      title,
+      brand,
+      model,
+      year,
+      price,
+      kmDriven,
+      fuelType,
+      transmission,
       images: imagePaths,
       owner,
     });
