@@ -1,6 +1,7 @@
 // src/components/CarCard.tsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
 
 export interface Car {
     _id: string;
@@ -16,7 +17,13 @@ export interface Car {
     isSold?: boolean;
 }
 
-const CarCard: React.FC<{ car: Car }> = ({ car }) => {
+interface CarCardProps {
+    car: Car;
+    isMyCar?: boolean;
+    onDelete?: () => void;
+}
+
+const CarCard: React.FC<CarCardProps> = ({ car, isMyCar, onDelete }) => {
     const navigate = useNavigate();
     return (
         <div className="bg-card text-card-foreground rounded-lg shadow overflow-hidden">
@@ -42,6 +49,9 @@ const CarCard: React.FC<{ car: Car }> = ({ car }) => {
                     <button onClick={() => navigate(`/car/${car._id}`)} className="px-3 py-1 rounded bg-primary text-white">
                         View
                     </button>
+                    {isMyCar && (
+                        <Button variant="destructive" onClick={onDelete}>Delete</Button>
+                    )}
                 </div>
             </div>
         </div>

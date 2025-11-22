@@ -79,7 +79,7 @@ const CarDetails: React.FC = () => {
     if (!car) return <div>Loading car...</div>;
 
     // The current user is the owner of the car
-    const isOwner = user && car.owner._id === user.id;
+    const isOwner = user ? car.owner._id === user.id : false;
 
     return (
         <div className="max-w-4xl mx-auto bg-card text-card-foreground p-6 rounded-lg shadow">
