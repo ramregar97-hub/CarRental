@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllCars } from "../API/api";
 import CarCard from "../components/CarCard";
+import { useAuth } from "../context/AuthContext";
 
 export interface Car {
     _id: string;
@@ -14,37 +15,50 @@ export interface Car {
     transmission: string;
     images?: string[];
     isSold?: boolean;
+    owner: {
+        _id: string;
+        name: string;
+        email: string;
+    };
 }
 
 const Home: React.FC = () => {
     const [cars, setCars] = useState<Car[]>([]);
     const [filteredCars, setFilteredCars] = useState<Car[]>([]);
     const [loading, setLoading] = useState(false);
+    const { user } = useAuth();
 
     // Filters
     const [search, setSearch] = useState("");
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
     const [sort, setSort] = useState("");
+    const [showMyCars, setShowMyCars] = useState(false);
+
+    const fetchCars = async () => {
+        setLoading(true);
+        try {
+            const data = await getAllCars();
+            setCars(data || []);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        (async () => {
-            setLoading(true);
-            try {
-                const data = await getAllCars();
-                setCars(data || []);
-                setFilteredCars(data || []);
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        })();
+        fetchCars();
     }, []);
 
     // Filtering Logic
     const applyFilters = () => {
         let list = [...cars];
+
+        // "My Cars" filter
+        if (showMyCars && user) {
+            list = list.filter((car) => car.owner._id === user.id);
+        }
 
         // Search by name
         if (search.trim()) {
@@ -78,11 +92,16 @@ const Home: React.FC = () => {
         setMinPrice("");
         setMaxPrice("");
         setSort("");
+        setShowMyCars(false);
     };
 
     useEffect(() => {
         applyFilters();
-    }, [search, minPrice, maxPrice, sort, cars]);
+    }, [search, minPrice, maxPrice, sort, cars, showMyCars, user]);
+
+    const handleCarDeleted = () => {
+        fetchCars(); // Refetch cars after deletion
+    };
 
     return (
         <div className="w-full pb-10">
@@ -109,7 +128,7 @@ const Home: React.FC = () => {
 
                 <h2 className="text-xl font-semibold mb-4">Filter Cars</h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 items-center">
 
                     {/* Search by Name */}
                     <input
@@ -149,6 +168,21 @@ const Home: React.FC = () => {
                         <option value="high">Price: High → Low</option>
                     </select>
                 </div>
+                
+                {/* My Cars Filter */}
+                {user && (
+                    <div className="mt-4">
+                        <label className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                checked={showMyCars}
+                                onChange={(e) => setShowMyCars(e.target.checked)}
+                                className="form-checkbox h-5 w-5 text-blue-600"
+                            />
+                            <span className="text-gray-700">Show My Cars Only</span>
+                        </label>
+                    </div>
+                )}
 
                 <div className="mt-4 flex gap-4">
                     <button
@@ -175,7 +209,7 @@ const Home: React.FC = () => {
                 ) : filteredCars.length ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filteredCars.map((c) => (
-                            <CarCard car={c} key={c._id} />
+                            <CarCard car={c} key={c._id} onDelete={handleCarDeleted} />
                         ))}
                     </div>
                 ) : (

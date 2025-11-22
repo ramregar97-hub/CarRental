@@ -38,11 +38,21 @@ export const getCarById = async (id: string) => {
   return res.data; // expected car object
 };
 
+export const getMyCars = async () => {
+  const res = await API.get("/cars/my-cars");
+  return res.data; // expected array of cars
+};
+
 export const addCarAPI = async (formData: FormData) => {
   // Backend must accept FormData with images
   const res = await API.post("/cars/add", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
+  return res.data;
+};
+
+export const deleteCar = async (id: string) => {
+  const res = await API.delete(`/cars/${id}`);
   return res.data;
 };
 

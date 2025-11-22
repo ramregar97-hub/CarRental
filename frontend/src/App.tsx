@@ -1,12 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-
 import Login from "./Pages/Login.tsx";
 import Register from "./Pages/Register.tsx";
 import Home from "./Pages/Home.tsx";
-import AddCar from "./Pages/AddCar.tsx";
 import NavBar from "./components/Layout/NavBar.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import CarDetails from "./Pages/CarDetails.tsx";
+import MyCars from "./Pages/MyCars.tsx"; // Import MyCars component
+import AddCar from "./Pages/AddCar.tsx";
 
 const App: React.FC = () => {
   return (
@@ -23,6 +23,14 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute>
                 <AddCar />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-cars"
+            element={
+              <ProtectedRoute>
+                <MyCars />
               </ProtectedRoute>
             }
           />
