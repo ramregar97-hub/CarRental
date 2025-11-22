@@ -40,16 +40,16 @@ const CarCard: React.FC<CarCardProps> = ({ car, isMyCar, onDelete }) => {
 
             <div className="p-3">
                 <h4 className="font-semibold">{car.title ?? `${car.brand} ${car.model}`}</h4>
-                <p className="text-sm text-muted-foreground">Year: {car.year ?? "-"}</p>
+                <p className="text-sm text-muted-foreground">Year: {car.year ?? "-"} </p>
                 <p className="text-sm text-muted-foreground">
                     {car.kmDriven.toLocaleString()} km · {car.fuelType} · {car.transmission}
                 </p>
                 <p className="text-lg font-bold mt-2">₹ {car.price.toLocaleString()}</p>
 
                 <div className="mt-3 flex gap-2">
-                    <button onClick={() => navigate(`/car/${car._id}`)} className="px-3 py-1 rounded bg-primary text-white">
+                    <Button onClick={() => navigate(`/car/${car._id}`)}>
                         View
-                    </button>
+                    </Button>
                     {isMyCar && (
                         <Button variant="destructive" onClick={onDelete}>Delete</Button>
                     )}

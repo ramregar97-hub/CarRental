@@ -140,3 +140,41 @@ export const toggleLiveStatus = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 }
+
+export const updateCar = async (req, res) => {
+    try {
+        const car = await Car.findById(req.params.id);
+        if (!car) {
+            return res.status(404).json({ message: "Car not found" });
+        }
+        if (car.owner.toString() !== req.user.id) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        const {
+            title,
+            brand,
+            model,
+            year,
+            price,
+            kmDriven,
+            fuelType,
+            transmission,
+        } = req.body;
+
+        car.title = title ?? car.title;
+        car.brand = brand ?? car.brand;
+        car.model = model ?? car.model;
+        car.year = year ?? car.year;
+        car.price = price ?? car.price;
+        car.kmDriven = kmDriven ?? car.kmDriven;
+        car.fuelType = fuelType ?? car.fuelType;
+        car.transmission = transmission ?? car.transmission;
+
+        await car.save();
+
+        res.json({ message: "Car updated successfully", car });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

@@ -1,5 +1,5 @@
 import express from "express";
-import { addCar, buyCar, getCars, getCarById, getMyCars, deleteCar, toggleLiveStatus } from "../controllers/car.controller.js";
+import { addCar, buyCar, getCars, getCarById, getMyCars, deleteCar, toggleLiveStatus, updateCar } from "../controllers/car.controller.js";
 import { auth } from "../middleware/auth.middleware.js";
 import { upload } from "../middleware/multer.js";
 
@@ -10,6 +10,7 @@ router.get("/my-cars", auth, getMyCars);
 router.get("/:id", getCarById);
 router.delete("/:id", auth, deleteCar);
 router.patch("/toggle-live/:id", auth, toggleLiveStatus);
+router.put("/:id", auth, updateCar);
 
 
 // Add a car (Login required)
